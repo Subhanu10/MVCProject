@@ -99,32 +99,29 @@ namespace MVCStudentInformation.Controllers
                 if (ModelState.IsValid)
                 {
 
-                
-                    if (repo.CheckDuplicate(details.Id,details.Email,details.MobileNumber))
+
+                    if (repo.CheckDuplicate(details.Id, details.Email, details.MobileNumber))
                     {
                         ModelState.AddModelError("", "Email or MobileNumber already exists!");
 
                         return View("Create", details);
                     }
-                     else
-                     { 
-                    
-                    repo.AddStudent(details);
-                    TempData["Success"] = "Student added successfully!";
 
-                    return RedirectToAction(nameof(StudentInformation));
-                     }
-                else
-                {
-                    return View("Create", details);
-                }
                     
-                
-                
-                
-                
+
+                        repo.AddStudent(details);
+                        TempData["Success"] = "Student added successfully!";
+
+                        return RedirectToAction(nameof(StudentInformation));
+
+                        return View("AddStudent", details);
+                    
+
+
+                }
+                return View("AddStudent", details);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View("Error", new ErrorViewModel(ex.Message));
             }
