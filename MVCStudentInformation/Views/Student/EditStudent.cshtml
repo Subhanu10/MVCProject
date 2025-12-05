@@ -1,0 +1,72 @@
+﻿@model dataAccessLayer.StudentInformation
+
+@{
+    ViewData["Title"] = "EditStudent";
+}
+
+<h1>EditStudent</h1>
+
+<h4>StudentInformation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateStudent">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Id" type="hidden" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" type="email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MobileNumber" class="control-label"></label>
+                <input asp-for="MobileNumber" class="form-control" />
+                <span asp-validation-for="MobileNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateId" class="control-label"></label>
+                @Html.DropDownListFor(
+               model => model.StateId,
+               new SelectList(ViewBag.States, "Value", "Text"),
+               "Select State",
+               new { @class = "form-control" })
+                <span asp-validation-for="StateId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+               @foreach (var g in ViewBag.GenderList)
+            {
+                <label>
+                    <input type="radio" name="Gender" value="@g.GenderName"
+                           @(Model.Gender == g.GenderName? "checked":"")/>@g.GenderName
+                </label>
+            }
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DOB" class="control-label"></label>
+                <input asp-for="DOB" class="form-control" />
+                <span asp-validation-for="DOB" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="StudentInformation">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
