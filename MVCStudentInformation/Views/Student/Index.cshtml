@@ -31,22 +31,7 @@
         });
     }
 
-    $("#formAddOrEdit").submit(function (e) {
-        e.preventDefault();
-        $.ajex({
-            url: this.action,
-            type: this.method,
-            data: $(this).serialize(),
-            success: function (res) {
-                if (res.success) {
-                    $("#form-modal").modal("hide");
-                    location.reload();
-                }
-                else {
-                    $("#form-modal.modal-body").html(res)
-                }
-            }
-        });
-    });
+
+   
 </script>
 }

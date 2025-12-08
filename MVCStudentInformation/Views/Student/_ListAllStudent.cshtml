@@ -18,9 +18,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.MobileNumber)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StateId)
-            </th>
+                      
             <th>
                 @Html.DisplayNameFor(model => model.StateName)
             </th>
@@ -48,9 +46,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.MobileNumber)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StateId)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.StateName)
             </td>
@@ -63,15 +59,15 @@
             <td>
 
                 <button class="btn btn-primary"
-                        onclick="openPopup('@Url.Action("AddOrEdit", "Student", new { id = item.Id })')">
+                        onclick="openPopup('@Url.Action("CreateOrEdit", "Student", new { id = item.Id })')">
                     Edit
                 </button>
                 <button class="btn btn-primary"
-                        onclick="openPopup('@Url.Action("_Details", "Student", new { id = item.Id })')">
+                        onclick="openPopup('@Url.Action("StudentDetails", "Student", new { id = item.Id })')">
                     Details
                 </button>
                 <button class="btn btn-primary"
-                        onclick="openPopup('@Url.Action("_Delete", "Student", new { id = item.Id })')">
+                        onclick="openPopup('@Url.Action("DeleteId", "Student", new { id = item.Id })')">
                     Delete
                 </button>
             </td>

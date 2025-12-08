@@ -174,6 +174,7 @@ namespace dataAccessLayer
                             Email = data["Email"].ToString(),
                             MobileNumber = data["MobileNumber"].ToString(),
                             StateId = Convert.ToInt32(data["StateId"]),
+                            StateName = data["StateName"].ToString(),
                             Gender = data["Gender"].ToString(),
                             DOB = Convert.ToDateTime(data["DOB"])
                         };

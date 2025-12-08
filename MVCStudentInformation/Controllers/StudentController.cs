@@ -23,8 +23,6 @@ namespace MVCStudentInformation.Controllers
         {
             try
             {
-
-
                 var student = repo.GetAllStudents();
                 return View("GetAllStudent", student);
             }
@@ -283,41 +281,101 @@ namespace MVCStudentInformation.Controllers
 
         // POST: StudentController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddOrEdit(StudentInformation details)
+        //[ValidateAntiForgeryToken]
+        public ActionResult Save(StudentInformation details)
         {
             try
             {
 
-                var stateList = repo.GetStates();
-                ViewBag.States = stateList.Select(s => new SelectListItem
-                {
-                    Text = s.StateName,
-                    Value = s.StateId.ToString()
-                }).ToList();
+                ViewBag.States = repo.GetStates()
+                    .Select(s => new SelectListItem
+                    {
+                        Text = s.StateName,
+                        Value = s.StateId.ToString()
+                    }).ToList();
 
                 ViewBag.GenderList = repo.GetGender();
 
+                
                 if (!ModelState.IsValid)
                 {
                     return PartialView("_AddOrEdit", details);
                 }
+
+            
                 if (repo.CheckDuplicate(details.Id, details.Email, details.MobileNumber))
                 {
-                    ModelState.AddModelError("", "Email or MobileNumber already exists!");
-
+                    ModelState.AddModelError("", "Email or Mobile Number already exists!");
                     return PartialView("_AddOrEdit", details);
                 }
+
+                
                 if (details.Id == 0)
                 {
                     repo.AddStudent(details);
-
                     return Json(new { success = true, message = "Student added successfully!" });
                 }
-                repo.UpdateStudent(details);
-                return Json(new { success = true, message = "Student updated successfully!" });
+                else
+                {
+                    repo.UpdateStudent(details);
+                    return Json(new { success = true, message = "Student updated successfully!" });
+                }
+
+           
             }
 
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel(ex.Message));
+            }
+        }
+
+        // GET: StudentController/Delete/5
+        public ActionResult DeleteId(int id)
+        {
+            try
+            {
+                var student = repo.GetStudentById(id);
+                if (student == null)
+                {
+                    return NotFound();
+                }
+                return PartialView("_Delete", student);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel(ex.Message));
+            }
+        }
+
+        // POST: StudentController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteDetails(int id)
+        {
+            try
+            {
+                repo.DeleteStudent(id);
+                return RedirectToAction(nameof(AllStudent));
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel(ex.Message));
+            }
+        }
+
+        // GET: StudentController/Details/5
+        public ActionResult StudentDetails(int id)
+        {
+            try
+            {
+                var student = repo.GetStudentById(id);
+                if (student == null)
+                {
+                    return NotFound();
+                }
+                return PartialView("_Details",student);
+            }
             catch (Exception ex)
             {
                 return View("Error", new ErrorViewModel(ex.Message));

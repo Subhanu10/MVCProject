@@ -1,71 +1,106 @@
 ﻿@model dataAccessLayer.StudentInformation
+    <div class="d-flex justify-content-center align-items-center" style="min-height:100vh;">
+        <div  style="width: 450px;">
+            @{
+                ViewData["Title"] = "CreateNew";
 
-@{
-    ViewData["Title"] = "CreateNew";
+            }
 
-}
+            <h1>Create</h1>
 
-<h1>Create</h1>
+            
+            <div class="row">
 
-<h4>StudentInformation</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="_AddOrEdit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="modal-body">
-                @Html.HiddenFor(m => m.Id)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Name)
-                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Email)
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.MobileNumber)
-                @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control" })
-                <span asp-validation-for="MobileNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.StateId)
-                @Html.DropDownListFor(
-            model => model.StateId,
-            ViewBag.States as List<SelectListItem>,
-            "Select State",
-            new { @class = "form-control" })
-                <span asp-validation-for="StateId" class="text-danger"></span>
-            </div>
+                <div class="col-md-12">
+                    <form id="studentForm">
 
-            <div class="form-group">
-                @Html.LabelFor(m => m.Gender)
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="modal-body">
+                            @Html.HiddenFor(m => m.Id)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Name)
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email)
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.MobileNumber)
+                            @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control" })
+                            <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="StateId">State</label>
+                            @Html.DropDownListFor(model => model.StateId,
+                                                  (IEnumerable<SelectListItem>)ViewBag.States,
+                                                  "-- Select State --",
+                                                  new { @class = "form-control" })
 
-                @foreach (var g in ViewBag.GenderList)
-                {
-                    <label>
-                        <input type="radio" name="Gender" value="@g.GenderName" />@g.GenderName
-                    </label>
-                }
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.DOB)
-                @Html.TextBoxFor(m => m.DOB, new { @class = "form-control" })
-                <span asp-validation-for="DOB" class="text-danger"></span>
-            </div>
-            <div class="modal-footer">
+                            <span asp-validation-for="StateId" class="text-danger"></span>
+                        </div>
+                    
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Gender)
 
-                <button type="submit" class="btn btn-success">Save</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            @foreach (var g in ViewBag.GenderList)
+                            {
+                                <label>
+                                    <input type="radio" name="Gender" value="@g.GenderName" />@g.GenderName
+                                </label>
+                            }
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.DOB)
+                            @Html.TextBoxFor(m => m.DOB, new { @class = "form-control" })
+                            <span asp-validation-for="DOB" class="text-danger"></span>
+                        </div>
+
+                    </form>
+                    <div>
+                        <button type="button" id="saveStudent" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+                
             </div>
-        </form>
+        </div>
     </div>
-</div>
+
+<script>
+
+    $("#saveStudent").on("click", function () {
+       
+
+        $.ajax({
+            type: "POST",
+            url: "/Student/Save",
+            data: $("#studentForm").serialize(),
+            success: function (response) {
+                if (response.success) {
+                    // Redirect to AllStudents page
+                    window.location.href = "/Student/AllStudent";
+                } else {
+                    // Handle errors if needed
+                    $("#myModelContent").html(response);
+                    $("#myModal").modal("show");
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors
+                console.error('AJAX error:', status, error);
+                alert(xhr.responseText);
+                // Display an error message to the user, potentially using xhr.responseText
+            }
+        });
+
+    });
 
 
+</script>
 
 
